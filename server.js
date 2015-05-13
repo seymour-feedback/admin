@@ -29,8 +29,7 @@ app
   .locals.basedir = path.join(__dirname, 'views/');
 
 app
-  .set('port', config.port)
-  .set('ip', config.ip)
+  .set('port', process.env.PORT || config.port)
   .set('name', config.appName)
   .set('views', app.locals.basedir)
   .set('view engine', 'jade');
@@ -50,7 +49,7 @@ app
   .use(session({ secret: config.sessionSecret, saveUninitialized: true, resave: true} ))
   .use(routes(router));
 
-server = app.listen(app.get('port'), app.get('ip'), function() {
+server = app.listen(app.get('port'), function() {
   console.log('Seymour Admin server listening on port %d', server.address().port);
 });
 
