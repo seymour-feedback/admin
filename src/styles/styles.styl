@@ -1,0 +1,32 @@
+body {
+  padding: 10px;
+}
+
+#scene {
+  position: relative;
+}
+
+canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#notifications li {
+  text-decoration: none;
+  display: inline-block;
+  margin: 5px;
+  cursor: pointer;
+  & input {
+    visibility: hidden;
+  }
+  &.active {
+    text-decoration: underline;
+    & input {
+      visibility: visible;
+      &:after {
+        content: 'x';
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+extend ./layout
+
+block title
+  title Admin
+
+block main
+
+  h1 Seymour Admin
+
+  p Hi #{locals.username}
+
+  ul#notifications
+
+  p
+    a(href='/logout') logout when you're done
+
+  section#scene
+    iframe(src='#{locals.url}', sandbox='allow-same-origin', seamless='seamless')
+
+  script(src='/js/app.js')
