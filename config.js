@@ -5,7 +5,7 @@ module.exports = {
   port: 3002,
   sessionSecret: 'pooponthefloor',
   creds: {
-    mongoUrl: 'mongodb://localhost:27017/test'
+    mongoUrl: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/test'
   },
   socketPort: 3001,
   adminHost: 'http://localhost:3002'
