@@ -15,24 +15,28 @@ function getAuthErrors(details) {
         message: 'password is required',
         path: 'password',
         type: 'required'
+      },
+      url: {
+        message: 'url is required',
+        path: 'url',
+        type: 'required'
       }
     }
   };
-  return Object.keys(details).map(function (name) {
-    if (!details[name]) {
-      return authErrors.errors[name];
-    }
+  Object.keys(details).forEach(function (name) {
+      details[name] = authErrors.errors[name];
   });
+  return details;
 }
 
-function getMongoErrors(code) {
+function getMongoErrors(error) {
   var mongoErrors = {
     11000: {
       message: 'Key already exists',
       name: 'DuplicateKeyError'
     }
   };
-  return mongoErrors[code];
+  return mongoErrors[error.code];
 }
 
 module.exports = {
@@ -40,7 +44,10 @@ module.exports = {
   login: function (details) {
     return new Promise(function (resolve, reject) {
       if (!details.username || !details.password) {
-        var err = getAuthErrors(details);
+        var err = {
+          message: 'Username or password is not correct',
+          errors: getAuthErrors(details)
+        };
         return reject(err);
       }
       User.findOne(details, function (err, data) {
@@ -55,12 +62,14 @@ module.exports = {
   register: function (details) {
     return new Promise(function (resolve, reject) {
       var user = new User(details);
-      user.save(function (err, data) {
-        if (err) {
-          if (err.name === 'MongoError') {
-            err = getMongoErrors(err.code);
+      user.save(function (error, data) {
+        if (error) {
+          if (error.name === 'MongoError') {
+            error = getMongoErrors.call(user, error);
+          } else {
+            error.errors = getAuthErrors(error.errors);
           }
-          return reject(err);
+          return reject(error);
         }
         resolve(data);
       });
