@@ -15,6 +15,6 @@ block main
     a(href='/logout') logout when you're done
 
   section#scene
-    iframe(src='#{locals.url}', sandbox='allow-same-origin allow-scripts', seamless='seamless')
+    iframe(src='#{locals.url}', sandbox='allow-same-origin allow-scripts', seamless='seamless', width='100%', height='800px')
 
   script(src='/js/app.js')
