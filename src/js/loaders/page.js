@@ -1,7 +1,7 @@
 'use strict';
 
-var NotificationsView = require('../views/notifications');
+var PageView = require('../views/page');
 
-var notes = new NotificationsView({
-  el: '#notifications'
+var page = new PageView({
+  el: '#page'
 });

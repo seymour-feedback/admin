@@ -7,7 +7,7 @@ module.exports = Backbone.Collection.extend({
 
   model: MsgModel,
 
-  url: 'wss://127.0.0.1:3001',
+  url: 'ws://127.0.0.1:3001',
 
   entity: 'messages',
 

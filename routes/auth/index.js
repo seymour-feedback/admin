@@ -3,5 +3,6 @@
 module.exports = {
   login: require('./login'),
   register: require('./register'),
-  logout: require('./logout')
+  logout: require('./logout'),
+  remove: require('./remove')
 };

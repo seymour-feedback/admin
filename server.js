@@ -29,19 +29,19 @@ app
   .locals.basedir = path.join(__dirname, 'views/');
 
 app
-  .set('port', process.env.PORT || config.port)
+  .set('port', config.port)
   .set('name', config.appName)
   .set('views', app.locals.basedir)
   .set('view engine', 'jade');
 
 app
   .use(compression())
-  .use(express.static(path.join(__dirname, '/dist')))
   .use(stylus.middleware({
     src: path.join(__dirname, '/src'),
     dest: path.join(__dirname, '/dist'),
     compile: compile
   }))
+  .use(express.static(path.join(__dirname, '/dist')))
   .use(cookieParser())
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())

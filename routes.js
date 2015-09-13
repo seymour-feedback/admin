@@ -11,7 +11,9 @@ module.exports = function (router) {
     .post('/login', auth.login.create)
     .get('/logout', auth.logout)
     .get('/register', auth.register.show)
-    .post('/register', auth.register.create);
+    .post('/register', auth.register.create)
+    .get('/remove', auth.remove.show)
+    .post('/remove', auth.remove.delete);
 
 };
 

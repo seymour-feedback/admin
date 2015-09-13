@@ -1,19 +1,20 @@
 'use strict';
 
-var PageView = require('./page'),
-  NoteView = require('./notification');
+var Backbone = require('../lib/'),
+  NoteView = require('./notification'),
+  CanvasView = require('./canvas');
 
-module.exports = PageView.extend({
+module.exports = Backbone.View.extend({
 
   events: {
     'click li': 'toggle',
     'click input': 'remove'
   },
 
-  initialize: function () {
-    PageView.prototype.initialize();
-    this.collections.notifications.on('add', this.render, this);
-    this.collections.notifications.fetch({ origin: this.origin });
+  initialize: function notificationsConstructor(options) {
+    console.log(this, options);
+    this.collection.on('add', this.render, this);
+    this.collection.fetch({ origin: options.origin });
   },
 
   render: function (model) {
@@ -23,12 +24,12 @@ module.exports = PageView.extend({
 
   toggle: function (e) {
     this.$(e.target).toggleClass('active');
-    this.canvas.toggleMessage(e.target, this.$(e.target).hasClass('active'));
+    this.collection.trigger('active', e.target.id, this.$(e.target).hasClass('active'));
   },
 
   remove: function (e) {
     e.stopPropagation();
-    this.collections.notifications.remove(this.collections.notifications.findWhere({ id: e.target.parentNode.id }));
+    this.collection.remove(this.collection.findWhere({ id: e.target.parentNode.id }));
     e.target.parentNode.remove();
   }
 

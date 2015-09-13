@@ -2,11 +2,11 @@
 
 var WebSocketServer = require('ws').Server,
   config = require('../config'),
-  ws = new WebSocketServer({ port: config.socketPort }),
+  socket = new WebSocketServer({ port: config.socketPort }),
   models = require('../models');
 
 function broadcast(req, res) {
-  ws.clients.forEach(function (client) {
+  socket.clients.forEach(function (client) {
     if (client.upgradeReq.headers.origin === config.adminHost) {
       if (Array.isArray(res) && req.entity === 'notifications') {
         res = res.filter(function (msg) { return req.origin === msg.location; });
@@ -21,17 +21,17 @@ function broadcast(req, res) {
 
 module.exports = function (messages) {
 
-  ws.on('connection', function onConnection(connection) {
+  socket.on('connection', function onConnection(connection) {
     messages(connection)({
       create: function (req) {
         models.message
           .create(req)
-          .then(broadcast.bind(ws, req))
+          .then(broadcast.bind(socket, req))
           .catch(console.warn.bind(console, 'Error trying to create'));
       },
       read: function (req) {
         models.message.read(req.id)
-          .then(broadcast.bind(ws, req))
+          .then(broadcast.bind(socket, req))
           .catch(console.warn.bind(console, 'Error trying to read'));
       },
       update: function () {
@@ -40,7 +40,7 @@ module.exports = function (messages) {
       delete: function (req) {
         models.message
           .delete(req.id)
-          .then(broadcast.bind(ws, req))
+          .then(broadcast.bind(socket, req))
           .catch(console.warn.bind(console, 'Error trying to delete'));
       },
     });

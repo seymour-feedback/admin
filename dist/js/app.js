@@ -13681,6 +13681,8 @@ module.exports = Backbone.Collection.extend({
 var Backbone = require('../lib/'),
   NoteModel = require('../models/notification');
 
+console.log(process)
+
 module.exports = Backbone.Collection.extend({
 
   model: NoteModel,
@@ -13717,7 +13719,7 @@ module.exports = {
   loaders: require('./loaders/')
 };
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_a6764bd6.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_57022e48.js","/")
 },{"./collections":8,"./lib/":12,"./loaders/":13,"./models/":15,"./views/":20,"buffer":3,"oMfpAn":6}],12:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
@@ -13756,7 +13758,6 @@ Backbone.sync = function (method, model, options) {
     ws.onmessage = function (message) {
 
       var data = JSON.parse(message.data);
-      console.log(data);
       var model = models[data.entity];
 
       data = model.parse(data);
@@ -13793,14 +13794,14 @@ module.exports = {
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
-var NotificationsView = require('../views/notifications');
+var PageView = require('../views/page');
 
-var notes = new NotificationsView({
-  el: '#notifications'
+var page = new PageView({
+  el: '#page'
 });
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/loaders/page.js","/loaders")
-},{"../views/notifications":22,"buffer":3,"oMfpAn":6}],15:[function(require,module,exports){
+},{"../views/page":23,"buffer":3,"oMfpAn":6}],15:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -13851,41 +13852,56 @@ module.exports = Backbone.View.extend({
     this.context = this.el.getContext('2d');
     this.el.width = Backbone.$('#page').width();
     this.el.height = Backbone.$('#page').height();
+
     this.collections.messages.on('add', this.render, this);
     this.collections.notifications.on('remove', this.remove, this);
+    this.collections.notifications.on('active', this.toggleMessage, this);
   },
 
   render: function (model) {
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+    canvas.id = model.toJSON().id
+    canvas.width = this.el.width;
+    canvas.height = this.el.height;
+
+    this.$el.after(canvas);
+
+    // TODO - move code to message class
+
     var img = new window.Image();
-    this.clear();
+
     img.addEventListener('load', function () {
-      this.context.drawImage(img, 0, 0);
+      context.drawImage(img, 0, 0);
     }.bind(this), false);
     img.src = model.toJSON().data;
   },
 
   remove: function (model) {
     model.destroy();
-    this.clear();
+    this.clear(model.toJSON().id);
   },
 
-  clear: function () {
-    var img = this.context.createImageData(this.el.width, this.el.height);
-    for (var i = img.data.length; --i >= 0; ) {
-      img.data[i] = 0;
-    }
-    this.context.putImageData(img, 0, 0);
+  clear: function (id) {
+    // console.log(Backbone.$('#scene').find('#' + id))
+    Backbone.$('#scene').find('#' + id).remove();
+    // Backbone.$('canvas' + id).remove();
+    // var img = this.context.createImageData(this.el.width, this.el.height);
+    // for (var i = img.data.length; --i >= 0; ) {
+    //   img.data[i] = 0;
+    // }
+    // this.context.putImageData(img, 0, 0);
   },
 
-  toggleMessage: function (element, isActive) {
+  toggleMessage: function (id, isActive) {
     if (!isActive) {
-      this.clear();
+      this.clear(id);
     } else {
-      var model = this.collections.messages.findWhere({ id: element.id });
+      var model = this.collections.messages.findWhere({ id: id });
       if (!model) {
         this.collections.messages.fetch({
           origin: this.origin,
-          id: element.id
+          id: id
         });
       } else {
         this.collections.messages.trigger('add', model);
@@ -13908,6 +13924,10 @@ module.exports = Backbone.View.extend({
     this.setElement('iframe');
     this.el.height = window.document.documentElement.clientHeight;
     this.el.width = Backbone.$('#page').width();
+  },
+
+  src: function () {
+    return this.$el.attr('src');
   }
 
 });
@@ -13947,20 +13967,21 @@ module.exports = Backbone.View.extend({
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
-var PageView = require('./page'),
-  NoteView = require('./notification');
+var Backbone = require('../lib/'),
+  NoteView = require('./notification'),
+  CanvasView = require('./canvas');
 
-module.exports = PageView.extend({
+module.exports = Backbone.View.extend({
 
   events: {
     'click li': 'toggle',
     'click input': 'remove'
   },
 
-  initialize: function () {
-    PageView.prototype.initialize();
-    this.collections.notifications.on('add', this.render, this);
-    this.collections.notifications.fetch({ origin: this.origin });
+  initialize: function notificationsConstructor(options) {
+    console.log(this, options);
+    this.collection.on('add', this.render, this);
+    this.collection.fetch({ origin: options.origin });
   },
 
   render: function (model) {
@@ -13970,48 +13991,55 @@ module.exports = PageView.extend({
 
   toggle: function (e) {
     this.$(e.target).toggleClass('active');
-    this.canvas.toggleMessage(e.target, this.$(e.target).hasClass('active'));
+    this.collection.trigger('active', e.target.id, this.$(e.target).hasClass('active'));
   },
 
   remove: function (e) {
     e.stopPropagation();
-    this.collections.notifications.remove(this.collections.notifications.findWhere({ id: e.target.parentNode.id }));
+    this.collection.remove(this.collection.findWhere({ id: e.target.parentNode.id }));
     e.target.parentNode.remove();
   }
 
 });
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/views/notifications.js","/views")
-},{"./notification":21,"./page":23,"buffer":3,"oMfpAn":6}],23:[function(require,module,exports){
+},{"../lib/":12,"./canvas":18,"./notification":21,"buffer":3,"oMfpAn":6}],23:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
 var Backbone = require('../lib/'),
   NotificationsCollection = require('../collections/notifications'),
   MessageCollection = require('../collections/messages'),
+  NotificationsView = require('./notifications'),
   IframeView = require('./iframe'),
   CanvasView = require('./canvas');
 
 module.exports = Backbone.View.extend({
 
   initialize: function () {
+
     this.collections = {};
     this.collections.messages = new MessageCollection(),
     this.collections.notifications = new NotificationsCollection();
 
-    this.setElement('#page');
-    this.origin = this.$('iframe').attr('src');
-
     this.iframe = new IframeView();
+    this.origin = this.iframe.src();
+
+    var notes = new NotificationsView({
+      el: '#notifications',
+      collection: this.collections.notifications,
+      origin: this.origin
+    });
 
     this.canvas = new CanvasView({
       collections: this.collections
     });
 
-    this.$('#scene').append(this.canvas.el);
+    this.iframe.$el.before(this.canvas.el);
+
   }
 
 });
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/views/page.js","/views")
-},{"../collections/messages":9,"../collections/notifications":10,"../lib/":12,"./canvas":18,"./iframe":19,"buffer":3,"oMfpAn":6}]},{},[11])
+},{"../collections/messages":9,"../collections/notifications":10,"../lib/":12,"./canvas":18,"./iframe":19,"./notifications":22,"buffer":3,"oMfpAn":6}]},{},[11])

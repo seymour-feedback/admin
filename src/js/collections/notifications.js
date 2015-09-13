@@ -3,6 +3,8 @@
 var Backbone = require('../lib/'),
   NoteModel = require('../models/notification');
 
+console.log(process)
+
 module.exports = Backbone.Collection.extend({
 
   model: NoteModel,

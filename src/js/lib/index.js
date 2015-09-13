@@ -34,7 +34,6 @@ Backbone.sync = function (method, model, options) {
     ws.onmessage = function (message) {
 
       var data = JSON.parse(message.data);
-      console.log(data);
       var model = models[data.entity];
 
       data = model.parse(data);
