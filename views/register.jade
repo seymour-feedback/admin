@@ -5,33 +5,36 @@ block title
 
 block main
 
-  h1 Login to Seymour admin panel
+  block main-centre
+    section#centre-content
 
-  p
-    a(href='/login') or log in
+      h1 Register
 
-  form(action='/register', method='post', novalidate='true')
+      p
+        a(href='/login') or log in
 
-    if locals.err && locals.err.message
-      p.error=locals.err.message
+      form(action='/register', method='post', novalidate='true')
 
-    .form-row
-      label(for='username') username
-      input(id='username', name='username')
-      if locals.err && locals.err.errors && locals.err.errors.username
-        label.error=locals.err.errors.username.message
+        if locals.err && locals.err.message
+          p.error=locals.err.message
 
-    .form-row
-      label(for='password') password
-      input(type='password', id='password', name='password')
-      if locals.err && locals.err.errors && locals.err.errors.password
-        label.error=locals.err.errors.password.message
+        .form-row
+          label(for='username') username
+          input(id='username', name='username')
+          if locals.err && locals.err.errors && locals.err.errors.username
+            label.error=locals.err.errors.username.message
 
-    .form-row
-      label(for='url') url
-      input(id='url', name='url')
-      if locals.err && locals.err.errors && locals.err.errors.url
-        label.error=locals.err.errors.url.message
+        .form-row
+          label(for='password') password
+          input(type='password', id='password', name='password')
+          if locals.err && locals.err.errors && locals.err.errors.password
+            label.error=locals.err.errors.password.message
 
-    .form-row
-      button(type='submit') Register
+        .form-row
+          label(for='url') url
+          input(id='url', name='url')
+          if locals.err && locals.err.errors && locals.err.errors.url
+            label.error=locals.err.errors.url.message
+
+        .form-row
+          button(type='submit') Register

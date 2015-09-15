@@ -5,21 +5,24 @@ block title
 
 block main
 
-  h1 Remove user
+  block main-centre
+    section#centre-content
 
-  p
-    a(href='/login') or login
+      h1 Remove user
 
-  form(action='/remove', method='post', novalidate='true')
+      p
+        a(href='/login') or login
 
-    if locals.err && locals.err.message
-      p.error=locals.err.message
+      form(action='/remove', method='post', novalidate='true')
 
-    .form-row
-      label(for='username') username
-      input(id='username', name='username')
-      if locals.err && locals.err.errors && locals.err.errors.username
-        label.error=locals.err.errors.username.message
+        if locals.err && locals.err.message
+          p.error=locals.err.message
 
-    .form-row
-      button(type='submit') Remove user
+        .form-row
+          label(for='username') username
+          input(id='username', name='username')
+          if locals.err && locals.err.errors && locals.err.errors.username
+            label.error=locals.err.errors.username.message
+
+        .form-row
+          button(type='submit') Remove user

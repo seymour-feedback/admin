@@ -13681,8 +13681,6 @@ module.exports = Backbone.Collection.extend({
 var Backbone = require('../lib/'),
   NoteModel = require('../models/notification');
 
-console.log(process)
-
 module.exports = Backbone.Collection.extend({
 
   model: NoteModel,
@@ -13719,21 +13717,21 @@ module.exports = {
   loaders: require('./loaders/')
 };
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_57022e48.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_dbc7ed7a.js","/")
 },{"./collections":8,"./lib/":12,"./loaders/":13,"./models/":15,"./views/":20,"buffer":3,"oMfpAn":6}],12:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
 var Backbone = require('backbone'),
   $ = require('jquery'),
-  ws = null,
+  webSocket = null,
   open = false,
   models = {};
 
 
 Backbone.sync = function (method, model, options) {
-  if (!ws) {
-    ws = new window.WebSocket(model.url);
+  if (!webSocket) {
+    webSocket = new window.WebSocket(model.url);
   }
 
   options = options || {};
@@ -13743,7 +13741,7 @@ Backbone.sync = function (method, model, options) {
   }
 
   if (open) {
-    ws.send(JSON.stringify({
+    webSocket.send(JSON.stringify({
       method: method,
       entity: model.entity,
       origin: options.origin,
@@ -13751,11 +13749,11 @@ Backbone.sync = function (method, model, options) {
     }));
   }
 
-  ws.onopen = function connectionOpen() {
+  webSocket.onopen = function connectionOpen() {
 
     open = true;
 
-    ws.onmessage = function (message) {
+    webSocket.onmessage = function (message) {
 
       var data = JSON.parse(message.data);
       var model = models[data.entity];
@@ -13766,7 +13764,7 @@ Backbone.sync = function (method, model, options) {
       }
     };
 
-    ws.send(JSON.stringify({
+    webSocket.send(JSON.stringify({
       method: method,
       entity: model.entity,
       origin: options.origin
@@ -13979,22 +13977,21 @@ module.exports = Backbone.View.extend({
   },
 
   initialize: function notificationsConstructor(options) {
-    console.log(this, options);
     this.collection.on('add', this.render, this);
     this.collection.fetch({ origin: options.origin });
   },
 
-  render: function (model) {
+  render: function render(model) {
     var note = new NoteView(model.toJSON());
     this.$el.append(note.render());
   },
 
-  toggle: function (e) {
+  toggle: function toggle(e) {
     this.$(e.target).toggleClass('active');
     this.collection.trigger('active', e.target.id, this.$(e.target).hasClass('active'));
   },
 
-  remove: function (e) {
+  remove: function remove(e) {
     e.stopPropagation();
     this.collection.remove(this.collection.findWhere({ id: e.target.parentNode.id }));
     e.target.parentNode.remove();

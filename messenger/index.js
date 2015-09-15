@@ -2,12 +2,12 @@
 
 var WebSocketServer = require('ws').Server,
   config = require('../config'),
-  socket = new WebSocketServer({ port: config.socketPort }),
+  socket = new WebSocketServer({ port: config.socket_port }),
   models = require('../models');
 
 function broadcast(req, res) {
   socket.clients.forEach(function (client) {
-    if (client.upgradeReq.headers.origin === config.adminHost) {
+    if (client.upgradeReq.headers.origin === config.admin_host) {
       if (Array.isArray(res) && req.entity === 'notifications') {
         res = res.filter(function (msg) { return req.origin === msg.location; });
       }

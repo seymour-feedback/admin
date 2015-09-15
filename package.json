@@ -11,7 +11,9 @@
     "websockets",
     "feedback",
     "tools",
-    "collaboration"
+    "reports",
+    "messages",
+    "notifications"
   ],
   "author": "Joseph Chapman",
   "license": "Copyright",

@@ -2,14 +2,14 @@
 
 var Backbone = require('backbone'),
   $ = require('jquery'),
-  ws = null,
+  webSocket = null,
   open = false,
   models = {};
 
 
 Backbone.sync = function (method, model, options) {
-  if (!ws) {
-    ws = new window.WebSocket(model.url);
+  if (!webSocket) {
+    webSocket = new window.WebSocket(model.url);
   }
 
   options = options || {};
@@ -19,7 +19,7 @@ Backbone.sync = function (method, model, options) {
   }
 
   if (open) {
-    ws.send(JSON.stringify({
+    webSocket.send(JSON.stringify({
       method: method,
       entity: model.entity,
       origin: options.origin,
@@ -27,11 +27,11 @@ Backbone.sync = function (method, model, options) {
     }));
   }
 
-  ws.onopen = function connectionOpen() {
+  webSocket.onopen = function connectionOpen() {
 
     open = true;
 
-    ws.onmessage = function (message) {
+    webSocket.onmessage = function (message) {
 
       var data = JSON.parse(message.data);
       var model = models[data.entity];
@@ -42,7 +42,7 @@ Backbone.sync = function (method, model, options) {
       }
     };
 
-    ws.send(JSON.stringify({
+    webSocket.send(JSON.stringify({
       method: method,
       entity: model.entity,
       origin: options.origin

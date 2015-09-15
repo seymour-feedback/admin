@@ -14,14 +14,4 @@ gulp.task('js', function () {
     .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('css', function () {
-  gulp
-    .src('src/styles/styles.styl')
-    .pipe(stylus({
-      use: nib(),
-      compress: true
-    }))
-    .pipe(gulp.dest('dist/css'));
-});
-
-gulp.task('default', ['js', 'css'], function () {});
+gulp.task('default', ['js'], function () {});

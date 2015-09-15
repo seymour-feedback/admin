@@ -5,30 +5,33 @@ block title
 
 block main
 
-  h1 Login to Seymour admin panel
+  block main-centre
+    section#centre-content
 
-  p
-    a(href='/register') register
-     &nbsp; or &nbsp;
-    a(href='/remove') delete a user
+      h1 Login
 
-  form(action='/login', method='post', novalidate='true')
+      p
+        a(href='/register') register
+        |&nbsp;or&nbsp;
+        a(href='/remove') delete a user
 
-    if locals.err && locals.err.message
-      p.error=locals.err.message
+      form(action='/login', method='post', novalidate='true')
 
-    .form-row
-      label(for='username') username
-      input(id='username', name='username')
-      if locals.err && locals.err.errors && locals.err.errors.username
-        label.error=locals.err.errors.username.message
+        if locals.err && locals.err.message
+          p.error=locals.err.message
 
-    .form-row
-      label(for='password') password
-      input(type='password', id='password', name='password')
-      if locals.err && locals.err.errors && locals.err.errors.password
-        label.error=locals.err.errors.password.message
+        .form-row
+          label(for='username') username
+          input(id='username', name='username')
+          if locals.err && locals.err.errors && locals.err.errors.username
+            label.error=locals.err.errors.username.message
 
-    .form-row
-      button(type='submit') Login
+        .form-row
+          label(for='password') password
+          input(type='password', id='password', name='password')
+          if locals.err && locals.err.errors && locals.err.errors.password
+            label.error=locals.err.errors.password.message
+
+        .form-row
+          button(type='submit') Login
 

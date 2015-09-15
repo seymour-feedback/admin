@@ -3,8 +3,6 @@
 var express = require('express'),
   routes = require('./routes'),
   router = express.Router(),
-  messages = require('./messages'),
-  messenger = require('./messenger'),
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser'),
   session = require('express-session'),
@@ -30,7 +28,7 @@ app
 
 app
   .set('port', config.port)
-  .set('name', config.appName)
+  .set('host', config.host)
   .set('views', app.locals.basedir)
   .set('view engine', 'jade');
 
@@ -46,17 +44,11 @@ app
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
   .use(methodOverride(('X-HTTP-Method-Override')))
-  .use(session({ secret: config.sessionSecret, saveUninitialized: true, resave: true} ))
+  .use(session({ secret: config.secret, saveUninitialized: true, resave: true} ))
   .use(routes(router));
 
-server = app.listen(app.get('port'), function() {
-  console.log('Seymour Admin server listening on port %d', server.address().port);
+require('./messenger')(require('./messages'));
+
+server = app.listen(app.get('port'), app.get('host'), function() {
+  console.log('Seymour Admin server listening at %s', server.address().address, server.address().port);
 });
-
-//-----------------------------------------//
-
-messenger(messages);
-
-//----------------------------------------------------//
-
-
