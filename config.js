@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = {
-  host: process.env.HOST || '127.0.0.1',
   port: process.env.PORT || 3002,
   secret: 'pooponthefloor',
   mongodb_address: process.env.MONGODB_ADDRESS || 'mongodb://localhost:27017/test',

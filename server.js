@@ -28,7 +28,6 @@ app
 
 app
   .set('port', config.port)
-  .set('host', config.host)
   .set('views', app.locals.basedir)
   .set('view engine', 'jade');
 
@@ -49,6 +48,6 @@ app
 
 require('./messenger')(require('./messages'));
 
-server = app.listen(app.get('port'), app.get('host'), function() {
+server = app.listen(app.get('port'), function() {
   console.log('Seymour Admin server listening at %s', server.address().address, server.address().port);
 });
