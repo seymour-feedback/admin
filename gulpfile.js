@@ -14,4 +14,15 @@ gulp.task('js', function () {
     .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('default', ['js'], function () {});
+gulp.task('css', function () {
+  gulp
+    .src('src/styles/styles.styl')
+    .pipe(stylus({
+      use: nib(),
+      compress: true
+    }))
+    .pipe(gulp.dest('dist/styles'));
+});
+
+gulp.task('default', ['css', 'js'], function () {});
+
