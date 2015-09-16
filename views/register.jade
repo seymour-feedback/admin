@@ -9,29 +9,28 @@ block main
     section#centre-content
 
       h1 Register
+        | or&nbsp;
+        a.internal(href='/login') log in
 
-      p
-        a(href='/login') or log in
-
-      form(action='/register', method='post', novalidate='true')
+      form(action='/register', method='post', novalidate='true', autocomplete="off")
 
         if locals.err && locals.err.message
           p.error=locals.err.message
 
         .form-row
-          label(for='username') username
+          label(for='username') Username
           input(id='username', name='username')
           if locals.err && locals.err.errors && locals.err.errors.username
             label.error=locals.err.errors.username.message
 
         .form-row
-          label(for='password') password
+          label(for='password') Password
           input(type='password', id='password', name='password')
           if locals.err && locals.err.errors && locals.err.errors.password
             label.error=locals.err.errors.password.message
 
         .form-row
-          label(for='url') url
+          label(for='url') Website
           input(id='url', name='url')
           if locals.err && locals.err.errors && locals.err.errors.url
             label.error=locals.err.errors.url.message

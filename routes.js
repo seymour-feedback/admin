@@ -1,7 +1,7 @@
 'use strict';
 
-var admin = require('./routes/admin'),
-  auth = require('./routes/auth');
+var admin = require('./controllers/admin'),
+  auth = require('./controllers/auth');
 
 module.exports = function (router) {
 

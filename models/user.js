@@ -43,13 +43,6 @@ module.exports = {
 
   login: function (details) {
     return new Promise(function (resolve, reject) {
-      if (!details.username || !details.password) {
-        var err = {
-          message: 'Username or password is not correct',
-          errors: getAuthErrors(details)
-        };
-        return reject(err);
-      }
       User.findOne(details, function (err, data) {
         if (err || !data) {
           return reject(err);

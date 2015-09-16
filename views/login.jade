@@ -9,28 +9,25 @@ block main
     section#centre-content
 
       h1 Login
+        | or&nbsp;
+        a.internal(href='/register') Register
 
-      p
-        a(href='/register') register
-        |&nbsp;or&nbsp;
-        a(href='/remove') delete a user
-
-      form(action='/login', method='post', novalidate='true')
+      form(action='/login', method='post', novalidate='true', autocomplete='off')
 
         if locals.err && locals.err.message
           p.error=locals.err.message
 
         .form-row
-          label(for='username') username
+          label(for='username') Username
           input(id='username', name='username')
           if locals.err && locals.err.errors && locals.err.errors.username
-            label.error=locals.err.errors.username.message
+            label(for='username').error=locals.err.errors.username.message
 
         .form-row
-          label(for='password') password
+          label(for='password') Password
           input(type='password', id='password', name='password')
           if locals.err && locals.err.errors && locals.err.errors.password
-            label.error=locals.err.errors.password.message
+            label(for='password').error=locals.err.errors.password.message
 
         .form-row
           button(type='submit') Login
