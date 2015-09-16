@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Warning: no test specified\" && exit 0",
     "build": "gulp",
-    "postinstall": "gulp"
+    "postinstall": "node_modules/.bin/gulp"
   },
   "keywords": [
     "websockets",
