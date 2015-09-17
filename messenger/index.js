@@ -5,9 +5,13 @@ var WebSocketServer = require('ws').Server,
   socket = new WebSocketServer({ port: config.socket_port }),
   models = require('../models');
 
+function findPort(origin) {
+  return Number(origin.split(':')[2]);
+}
+
 function broadcast(req, res) {
   socket.clients.forEach(function (client) {
-    if (client.upgradeReq.headers.origin === config.admin_host) {
+    if (findPort(client.upgradeReq.headers.origin) === config.port) {
       if (Array.isArray(res) && req.entity === 'notifications') {
         res = res.filter(function (msg) { return req.origin === msg.location; });
       }
