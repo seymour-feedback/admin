@@ -7,7 +7,7 @@ var WebSocketServer = require('ws').Server,
 module.exports = function (messages, server) {
 
   var socket = new WebSocketServer({ server: server, port: config.socket.port });
-
+  console.log(socket.options.host)
   function findPort(origin) {
     return Number(origin.split(':')[2]);
   }
