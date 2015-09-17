@@ -46,8 +46,9 @@ app
   .use(session({ secret: config.secret, saveUninitialized: true, resave: true} ))
   .use(routes(router));
 
-require('./messenger')(require('./messages'));
-
 server = app.listen(app.get('port'), function() {
   console.log('Seymour Admin server listening at %s', server.address().address, server.address().port);
 });
+
+require('./messenger')(require('./messages'), server);
+

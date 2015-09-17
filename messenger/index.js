@@ -2,28 +2,29 @@
 
 var WebSocketServer = require('ws').Server,
   config = require('../config'),
-  socket = new WebSocketServer({ port: config.socket_port }),
   models = require('../models');
 
-function findPort(origin) {
-  return Number(origin.split(':')[2]);
-}
+module.exports = function (messages, server) {
 
-function broadcast(req, res) {
-  socket.clients.forEach(function (client) {
-    if (findPort(client.upgradeReq.headers.origin) === config.port) {
-      if (Array.isArray(res) && req.entity === 'notifications') {
-        res = res.filter(function (msg) { return req.origin === msg.location; });
-      }
-      if (req.entity === 'image') {
-        req.entity = 'notifications';
-      }
-      client.send(JSON.stringify({ entity: req.entity, method: req.method, res: res }));
-    }
-  });
-}
+  var socket = new WebSocketServer({ server: server, port: config.socket.port });
 
-module.exports = function (messages) {
+  function findPort(origin) {
+    return Number(origin.split(':')[2]);
+  }
+
+  function broadcast(req, res) {
+    socket.clients.forEach(function (client) {
+      if (findPort(client.upgradeReq.headers.origin) === config.port) {
+        if (Array.isArray(res) && req.entity === 'notifications') {
+          res = res.filter(function (msg) { return req.origin === msg.location; });
+        }
+        if (req.entity === 'image') {
+          req.entity = 'notifications';
+        }
+        client.send(JSON.stringify({ entity: req.entity, method: req.method, res: res }));
+      }
+    });
+  }
 
   socket.on('connection', function onConnection(connection) {
     messages(connection)({

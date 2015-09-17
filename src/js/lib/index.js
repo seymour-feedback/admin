@@ -7,11 +7,11 @@ var Backbone = require('backbone'),
   models = {};
 
 var config = require('../../../config');
-var protocol = window.location.protocol === 'https://' ? 'wss://' : 'ws://';
+var protocol = location.protocol.replace(/^http/, 'ws');
 
-Backbone.sync = function (method, model, options) {
+Backbone.sync = function sync(method, model, options) {
   if (!webSocket) {
-    webSocket = new window.WebSocket(protocol + window.location.hostname + ':' + config.socket_port);
+    webSocket = new window.WebSocket(protocol + location.hostname + ':' + config.socket.port);
   }
 
   options = options || {};
