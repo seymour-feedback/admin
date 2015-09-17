@@ -11,7 +11,7 @@ var protocol = location.protocol.replace(/^http/, 'ws');
 
 Backbone.sync = function sync(method, model, options) {
   if (!webSocket) {
-    webSocket = new window.WebSocket(protocol + location.hostname + ':' + config.socket.port);
+    webSocket = new window.WebSocket(protocol + '0.0.0.0' + ':' + config.socket.port);
   }
 
   options = options || {};
