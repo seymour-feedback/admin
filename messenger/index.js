@@ -6,15 +6,12 @@ var WebSocketServer = require('ws').Server,
 
 module.exports = function (messages, server) {
 
-  var socket = new WebSocketServer({ server: server, port: config.socket.port });
-  console.log(socket.options.host)
-  function findPort(origin) {
-    return Number(origin.split(':')[2]);
-  }
+  var socket = new WebSocketServer({ server: server });
 
   function broadcast(req, res) {
+
     socket.clients.forEach(function (client) {
-      if (findPort(client.upgradeReq.headers.origin) === config.port) {
+      if (client.upgradeReq.headers.host === client.upgradeReq.headers.origin.replace('http://', '')) {
         if (Array.isArray(res) && req.entity === 'notifications') {
           res = res.filter(function (msg) { return req.origin === msg.location; });
         }
@@ -35,7 +32,8 @@ module.exports = function (messages, server) {
           .catch(console.warn.bind(console, 'Error trying to create'));
       },
       read: function (req) {
-        models.message.read(req.id)
+        models.message
+          .read(req.id)
           .then(broadcast.bind(socket, req))
           .catch(console.warn.bind(console, 'Error trying to read'));
       },

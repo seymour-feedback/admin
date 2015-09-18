@@ -1,7 +1,6 @@
 'use strict';
 
 var Promise = require('bluebird'),
-  Test = require('../api/test'),
   Message = require('../api/message');
 
 module.exports = {

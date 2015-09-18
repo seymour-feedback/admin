@@ -6,12 +6,12 @@ var Backbone = require('backbone'),
   open = false,
   models = {};
 
-var config = require('../../../config');
-var protocol = location.protocol.replace(/^http/, 'ws');
+var host = location.origin.replace(/^http/, 'ws');
 
 Backbone.sync = function sync(method, model, options) {
+
   if (!webSocket) {
-    webSocket = new window.WebSocket(protocol + '0.0.0.0' + ':' + config.socket.port);
+    webSocket = new window.WebSocket(host);
   }
 
   options = options || {};
