@@ -1,12 +1,13 @@
 {
-  "name": "seymour-admin-server",
+  "name": "seymour-admin",
   "version": "0.0.0",
   "description": "seymour admin",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Warning: no test specified\" && exit 0",
     "build": "gulp",
-    "postinstall": "node_modules/.bin/gulp"
+    "build:js": "browserify --src src/js/app.js --dest dist/js",
+    "postinstall": "gulp"
   },
   "keywords": [
     "websockets",
@@ -16,26 +17,35 @@
     "messages",
     "notifications"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seymour-feedback/admin"
+  },
+  "readme": "./README.md",
   "author": "Joseph Chapman",
   "license": "Copyright",
   "dependencies": {
-    "express": "4.9.5",
-    "jade": "1.7.0",
-    "express-session": "1.10.0",
-    "body-parser": "1.10.1",
-    "cookie-parser": "1.3.3",
-    "method-override": "2.3.1",
-    "compression": "1.3.0",
-    "bluebird": "2.6.2",
-    "mongoose": "3.8.21",
-    "ws": "0.4.32",
     "backbone": "1.1.2",
+    "bluebird": "2.6.2",
+    "body-parser": "1.10.1",
     "browserify": "8.1.1",
-    "jquery": "2.1.3",
-    "stylus": "0.49.3",
-    "nib": "1.1.0",
+    "compression": "1.3.0",
+    "cookie-parser": "1.3.3",
+    "express": "4.9.5",
+    "express-session": "1.10.0",
     "gulp": "3.9.0",
     "gulp-browserify": "0.5.1",
-    "gulp-stylus": "2.0.0"
+    "gulp-stylus": "2.0.0",
+    "jade": "1.7.0",
+    "jquery": "2.1.3",
+    "method-override": "2.3.1",
+    "mongoose": "4.4.4",
+    "morgan": "^1.9.0",
+    "nib": "1.1.0",
+    "stylus": "0.49.3",
+    "ws": "0.4.32"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.7"
   }
 }
