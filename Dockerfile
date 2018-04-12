@@ -1,13 +1,17 @@
-FROM node:7
+FROM node:8
 
-COPY package*.json gulpfile.js /app/
-RUN chown -R node:node /app/*
+RUN mkdir /dist
 
-WORKDIR app
-RUN npm install
+COPY package.json package.json
 
-COPY . /app/
-RUN chown -R node:node /app/*
+RUN npm --loglevel warn install --production --no-optional
+
+COPY . .
+
+RUN chown -R node:node /dist
+
+RUN npm --loglevel warn run postinstall
+
 USER node
 
 CMD [ "npm", "start" ]

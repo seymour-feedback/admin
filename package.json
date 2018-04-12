@@ -7,7 +7,7 @@
     "test": "echo \"Warning: no test specified\" && exit 0",
     "build": "gulp",
     "build:js": "browserify --src src/js/app.js --dest dist/js",
-    "postinstall": "gulp"
+    "postinstall": "npm run build"
   },
   "keywords": [
     "websockets",

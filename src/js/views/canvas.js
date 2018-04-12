@@ -1,6 +1,7 @@
 'use strict';
 
 var Backbone = require('../lib');
+var Message = require('./message');
 
 module.exports = Backbone.View.extend({
 
@@ -26,14 +27,11 @@ module.exports = Backbone.View.extend({
 
     this.$el.after(canvas);
 
-    // TODO - move code to message class
-
-    var img = new window.Image();
-
-    img.addEventListener('load', function () {
-      context.drawImage(img, 0, 0);
-    }.bind(this), false);
-    img.src = model.toJSON().data;
+    const message = new Message();
+    message.image.addEventListener('load', function () {
+      context.drawImage(message.image, 0, 0);
+    }, false);
+    message.image.src = model.toJSON().data;
   },
 
   remove: function (model) {
@@ -45,11 +43,11 @@ module.exports = Backbone.View.extend({
     // console.log(Backbone.$('#scene').find('#' + id))
     Backbone.$('#scene').find('#' + id).remove();
     // Backbone.$('canvas' + id).remove();
-    // var img = this.context.createImageData(this.el.width, this.el.height);
-    // for (var i = img.data.length; --i >= 0; ) {
-    //   img.data[i] = 0;
+    // var message.image = this.context.createImageData(this.el.width, this.el.height);
+    // for (var i = message.image.data.length; --i >= 0; ) {
+    //   message.image.data[i] = 0;
     // }
-    // this.context.putImageData(img, 0, 0);
+    // this.context.putImageData(message.image, 0, 0);
   },
 
   toggleMessage: function (id, isActive) {
