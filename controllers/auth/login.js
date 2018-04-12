@@ -38,7 +38,7 @@ module.exports = {
 
     if (!req.body.username || !req.body.password) {
       var err = {
-        message: 'Username or password is not correct',
+        message: 'All fields are mandatory',
         errors: getAuthErrors(req.body)
       };
       return res.status(403).render('login', {
@@ -58,7 +58,7 @@ module.exports = {
           status = 404;
           err = {
             name: 'AuthenticationError',
-            message: 'No user could be found'
+            message: 'Username or password is incorrect'
           };
         }
         res.status(status).render('login', {

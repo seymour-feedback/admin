@@ -37,11 +37,12 @@ app.use(stylus.middleware({
   dest: path.join(__dirname, '/dist'),
   compile: compile
 }));
-app.use(express.static(path.join(__dirname, '/dist')))
-app.use(cookieParser())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-app.use(methodOverride(('X-HTTP-Method-Override')))
+app.use(express.static(path.join(__dirname, '/dist')));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(methodOverride(('X-HTTP-Method-Override')));
+
 app.use(session({
   secret: config.secret,
   saveUninitialized: true,

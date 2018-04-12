@@ -1,12 +1,12 @@
 'use strict';
 
-var WebSocketServer = require('ws').Server,
-  config = require('../config'),
-  models = require('../models');
+const WebSocketServer = require('ws').Server;
+const config = require('../config');
+const models = require('../models');
 
 module.exports = function (messages, server) {
 
-  var socket = new WebSocketServer({ server: server });
+  const socket = new WebSocketServer({ server: server });
 
   function broadcast(req, res) {
 

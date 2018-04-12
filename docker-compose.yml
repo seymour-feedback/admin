@@ -1,0 +1,14 @@
+admin:
+  build: .
+  environment:
+    - NODE_ENV=development
+    - MONGODB_ADDRESS=mongodb:27017
+  ports:
+    - "3002:3002"
+  volumes:
+    - .:/home/app/admin
+    - /home/app/admin/node_modules
+  links:
+    - mongodb
+mongodb:
+  image: mongo

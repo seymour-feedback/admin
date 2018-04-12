@@ -1,8 +1,8 @@
 'use strict';
 
-var  config = require('../config'),
-  mongoose = require('mongoose'),
-  db = mongoose.connection;
+const config = require('../config');
+const mongoose = require('mongoose');
+const db = mongoose.connection;
 
 mongoose.connect(config.mongodb_address);
 
